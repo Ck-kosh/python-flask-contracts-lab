@@ -136,6 +136,82 @@ Build the following routes:
 
 ---
 
+## Implementation Details
+
+### Routes Overview
+
+The application implements two API endpoints for managing contract and customer information:
+
+#### `GET /contract/<id>`
+- **Purpose**: Retrieves contract information by contract ID
+- **Success Response (200)**:
+  - Returns plain text contract information
+  - Example: `GET /contract/1` returns `"This contract is for John and building a shed"`
+- **Error Response (404)**:
+  - Returned when the contract ID does not exist
+
+#### `GET /customer/<customer_name>`
+- **Purpose**: Verifies if a customer exists (privacy-protecting endpoint)
+- **Success Response (204)**:
+  - Returns with an empty body (no sensitive data exposed)
+  - Example: `GET /customer/bob` returns status 204 with empty response
+- **Error Response (404)**:
+  - Returned when the customer name does not exist
+
+### Sample Data
+
+**Contracts:**
+```json
+[
+  {"id": 1, "contract_information": "This contract is for John and building a shed"},
+  {"id": 2, "contract_information": "This contract is for a deck for a buisiness"},
+  {"id": 3, "contract_information": "This contract is to confirm ownership of this car"}
+]
+```
+
+**Customers:**
+```
+["bob", "bill", "john", "sarah"]
+```
+
+### Running the Application
+
+1. Activate the virtual environment:
+   ```bash
+   pipenv shell
+   ```
+
+2. Run the Flask development server:
+   ```bash
+   python server/app.py
+   ```
+   The app will be available at `http://localhost:5555`
+
+### Testing
+
+Run the test suite to verify all endpoints:
+```bash
+pipenv run pytest server/testing/app_test.py -v
+```
+
+**All 6 tests pass:**
+- ✓ `/contract/<id>` route exists and returns 200 for valid contracts
+- ✓ Contract information is returned correctly
+- ✓ Invalid contract IDs return 404
+- ✓ `/customer/<customer_name>` route exists and returns 204 for valid customers
+- ✓ Customer endpoint returns empty response body
+- ✓ Invalid customer names return 404
+
+### Code Comments
+
+The implementation includes detailed docstrings and inline comments explaining:
+- Route functionality and parameters
+- Response codes and their meaning
+- Data lookup logic
+- Privacy considerations for the customer endpoint
+
+---
+
 ### Task 4: Document and Maintain
 
 #### Best Practices:
